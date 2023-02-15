@@ -103,5 +103,8 @@ dist
 .vs/
 .vscode/
 
+# WebStorm cache
+.idea/
+
 # React build folder
 build/
