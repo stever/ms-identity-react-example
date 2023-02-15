@@ -1,24 +1,3 @@
----
-page_type: sample
-name: Authenticate a user with Azure AD using msal.js and call an Azure AD protected Node.js Web Api using on-behalf of flow
-description: Handling Conditional Access challenges in an Azure AD protected Node.js web API calling another protected Node.js web API on behalf of a user using the on-behalf of flow
-languages:
- - javascript
-products:
- - azure-active-directory
- - msal-js
- - msal-react
- - passport-azure-ad
-urlFragment: ms-identity-javascript-react-tutorial
-extensions:
-- services: ms-identity
-- platform: javascript
-- endpoint: AAD v2.0
-- level: 300
-- client: React SPA
-- service: Node.js web API
----
-
 # Authenticate a user with Azure AD using msal.js and call an Azure AD protected Node.js Web Api using on-behalf of flow
 
 * [Overview](#overview)
@@ -29,7 +8,6 @@ extensions:
 * [Explore the sample](#explore-the-sample)
 * [Troubleshooting](#troubleshooting)
 * [About the code](#about-the-code)
-* [Contributing](#contributing)
 * [Learn More](#learn-more)
 
 ## Overview
@@ -45,7 +23,7 @@ This sample demonstrates a React single-page application (SPA) which lets a user
 3. This access token is also used by the Node.js API to obtain another Access token to call the MS Graph API **on user's behalf** using the [OAuth 2.0 on-behalf-of flow](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow).
 4. The Node.js **API** uses the [Microsoft Graph SDK](https://docs.microsoft.com/graph/sdks/sdks-overview) to call MS Graph
 
-![Scenario Image](./topology.png)
+![Scenario Image](topology.png)
 
 ## Contents
 
@@ -94,42 +72,15 @@ or download and extract the repository *.zip* file.
 
 ### Step 3: Register the sample application(s) in your tenant
 
-There are two projects in this sample. Each needs to be separately registered in your Azure AD tenant. To register these projects, you can:
-
-* follow the steps below for manually register your apps
-* or use PowerShell scripts that:
-  * **automatically** creates the Azure AD applications and related objects (passwords, permissions, dependencies) for you.
-  * modify the projects' configuration files.
-
-<details>
-   <summary>Expand this section if you want to use this automation:</summary>
-> :warning: If you have never used **Microsoft Graph PowerShell** before, we recommend you go through the [App Creation Scripts Guide](./AppCreationScripts/AppCreationScripts.md) once to ensure that your environment is prepared correctly for this step.
-
-1. On Windows, run PowerShell as **Administrator** and navigate to the root of the cloned directory
-2. In PowerShell run:
-
-    ```PowerShell
-    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
-    ```
-
-3. Run the script to create your Azure AD application and configure the code of the sample application accordingly.
-4. For interactive process -in PowerShell, run:
-
-    ```PowerShell
-    cd .\AppCreationScripts\
-    .\Configure.ps1 -TenantId "[Optional] - your tenant id" -AzureEnvironmentName "[Optional] - Azure environment, defaults to 'Global'"
-    ```
-
-> Other ways of running the scripts are described in [App Creation Scripts guide](./AppCreationScripts/AppCreationScripts.md). The scripts also provide a guide to automated application registration, configuration and removal which can help in your CI/CD scenarios.
-
-</details>
+There are two projects in this sample. Each needs to be separately registered in your Azure AD tenant. 
+To register these projects, you can follow the steps below for manually register your apps.
 
 #### Choose the Azure AD tenant where you want to create your applications
 
 To manually register the apps, as a first step you'll need to:
 
 1. Sign in to the [Azure portal](https://portal.azure.com).
-1. If your account is present in more than one Azure AD tenant, select your profile at the top right corner in the menu on top of the page, and then **switch directory** to change your portal session to the desired Azure AD tenant.
+2. If your account is present in more than one Azure AD tenant, select your profile at the top right corner in the menu on top of the page, and then **switch directory** to change your portal session to the desired Azure AD tenant.
 
 #### Register the service app (msal-node-api)
 
@@ -227,7 +178,7 @@ Open the project in your IDE (like Visual Studio or Visual Studio Code) to confi
     1. In the **Redirect URI** section enter the following redirect URIs:
         1. `http://localhost:3000/`
         2. `http://localhost:3000/redirect.html`
-    1. Click **Save** to save your changes.
+    2. Click **Save** to save your changes.
 7. Since this app signs-in users, we will now proceed to select **delegated permissions**, which is is required by apps signing-in users.
     1. In the app's registration screen, select the **API permissions** blade in the left to open the page where we add access to the APIs that your application needs:
     2. Select the **Add a permission** button and then:
@@ -288,8 +239,6 @@ For instance:
 1. Open your browser and navigate to `http://localhost:3000`.
 2. Click the **sign-in** button on the top right corner.
 3. Once you authenticate, Select the **Call API** button on the navigation bar.
-
-> :information_source: Did the sample not work for you as expected? Then please reach out to us using the [GitHub Issues](../../../../issues) page.
 
 ## Troubleshooting
 
