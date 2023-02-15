@@ -41,20 +41,19 @@ This sample demonstrates a React single-page application (SPA) which lets a user
 ## Scenario
 
 1. The client app uses **MSAL React** to sign-in a user and obtain a **JWT** [Access Token](https://aka.ms/access-tokens) from **Azure AD** for the **API**.
-1. The access token is used as a *bearer token* to authorize the user to call the Node.js **API** protected by **Azure AD**.
-1. This access token is also used by the Node.js API to obtain another Access token to call the MS Graph API **on user's behalf** using the [OAuth 2.0 on-behalf-of flow](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow).
-1. The Node.js **API** uses the [Microsoft Graph SDK](https://docs.microsoft.com/graph/sdks/sdks-overview) to call MS Graph
+2. The access token is used as a *bearer token* to authorize the user to call the Node.js **API** protected by **Azure AD**.
+3. This access token is also used by the Node.js API to obtain another Access token to call the MS Graph API **on user's behalf** using the [OAuth 2.0 on-behalf-of flow](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-on-behalf-of-flow).
+4. The Node.js **API** uses the [Microsoft Graph SDK](https://docs.microsoft.com/graph/sdks/sdks-overview) to call MS Graph
 
-![Scenario Image](./ReadmeFiles/topology.png)
+![Scenario Image](./topology.png)
 
 ## Contents
 
-| File/folder       | Description                                |
-|-------------------|--------------------------------------------|
-| `AppCreationScripts/` | Contains Powershell scripts to automate app registration. |
-| `SPA/src/authConfig.js`   | Contains configuration parameters for the SPA.   |
-| `API/authConfig.json`| Contains authentication parameters for the API. |
-| `API/auth/onBehalfOfClient.js`| Contains logic to acquire an access token for Graph API using OBO flow. |
+| File/folder                    | Description                                                             |
+|--------------------------------|-------------------------------------------------------------------------|
+| `SPA/src/authConfig.js`        | Contains configuration parameters for the SPA.                          |
+| `API/authConfig.json`          | Contains authentication parameters for the API.                         |
+| `API/auth/onBehalfOfClient.js` | Contains logic to acquire an access token for Graph API using OBO flow. |
 
 ## Prerequisites
 
@@ -107,14 +106,14 @@ There are two projects in this sample. Each needs to be separately registered in
 > :warning: If you have never used **Microsoft Graph PowerShell** before, we recommend you go through the [App Creation Scripts Guide](./AppCreationScripts/AppCreationScripts.md) once to ensure that your environment is prepared correctly for this step.
 
 1. On Windows, run PowerShell as **Administrator** and navigate to the root of the cloned directory
-1. In PowerShell run:
+2. In PowerShell run:
 
     ```PowerShell
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process -Force
     ```
 
-1. Run the script to create your Azure AD application and configure the code of the sample application accordingly.
-1. For interactive process -in PowerShell, run:
+3. Run the script to create your Azure AD application and configure the code of the sample application accordingly.
+4. For interactive process -in PowerShell, run:
 
     ```PowerShell
     cd .\AppCreationScripts\
@@ -135,57 +134,57 @@ To manually register the apps, as a first step you'll need to:
 #### Register the service app (msal-node-api)
 
 1. Navigate to the [Azure portal](https://portal.azure.com) and select the **Azure Active Directory** service.
-1. Select the **App Registrations** blade on the left, then select **New registration**.
-1. In the **Register an application page** that appears, enter your application's registration information:
+2. Select the **App Registrations** blade on the left, then select **New registration**.
+3. In the **Register an application page** that appears, enter your application's registration information:
     1. In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `msal-node-api`.
-    1. Under **Supported account types**, select **Accounts in this organizational directory only**
-    1. Select **Register** to create the application.
-1. In the **Overview** blade, find and note the **Application (client) ID**. You use this value in your app's configuration file(s) later in your code.
-1. In the app's registration screen, select the **Certificates & secrets** blade in the left to open the page where you can generate secrets and upload certificates.
-1. In the **Client secrets** section, select **New client secret**:
+    2. Under **Supported account types**, select **Accounts in this organizational directory only**
+    3. Select **Register** to create the application.
+4. In the **Overview** blade, find and note the **Application (client) ID**. You use this value in your app's configuration file(s) later in your code.
+5. In the app's registration screen, select the **Certificates & secrets** blade in the left to open the page where you can generate secrets and upload certificates.
+6. In the **Client secrets** section, select **New client secret**:
     1. Type a key description (for instance `app secret`).
-    1. Select one of the available key durations (**6 months**, **12 months** or **Custom**) as per your security posture.
-    1. The generated key value will be displayed when you select the **Add** button. Copy and save the generated value for use in later steps.
-    1. You'll need this key later in your code's configuration files. This key value will not be displayed again, and is not retrievable by any other means, so make sure to note it from the Azure portal before navigating to any other screen or blade.
-1. Since this app signs-in users, we will now proceed to select **delegated permissions**, which is is required by apps signing-in users.
+    2. Select one of the available key durations (**6 months**, **12 months** or **Custom**) as per your security posture.
+    3. The generated key value will be displayed when you select the **Add** button. Copy and save the generated value for use in later steps.
+    4. You'll need this key later in your code's configuration files. This key value will not be displayed again, and is not retrievable by any other means, so make sure to note it from the Azure portal before navigating to any other screen or blade.
+7. Since this app signs-in users, we will now proceed to select **delegated permissions**, which is is required by apps signing-in users.
     1. In the app's registration screen, select the **API permissions** blade in the left to open the page where we add access to the APIs that your application needs:
-    1. Select the **Add a permission** button and then:
-    1. Ensure that the **Microsoft APIs** tab is selected.
-    1. In the *Commonly used Microsoft APIs* section, select **Microsoft Graph**
-    1. In the **Delegated permissions** section, select **User.Read**, **offline_access** in the list. Use the search box if necessary.
-    1. Select the **Add permissions** button at the bottom.
-1. In the app's registration screen, select the **Expose an API** blade to the left to open the page where you can publish the permission as an API for which client applications can obtain [access tokens](https://aka.ms/access-tokens) for. The first thing that we need to do is to declare the unique [resource](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow) URI that the clients will be using to obtain access tokens for this API. To declare an resource URI(Application ID URI), follow the following steps:
+    2. Select the **Add a permission** button and then:
+    3. Ensure that the **Microsoft APIs** tab is selected.
+    4. In the *Commonly used Microsoft APIs* section, select **Microsoft Graph**
+    5. In the **Delegated permissions** section, select **User.Read**, **offline_access** in the list. Use the search box if necessary.
+    6. Select the **Add permissions** button at the bottom.
+8. In the app's registration screen, select the **Expose an API** blade to the left to open the page where you can publish the permission as an API for which client applications can obtain [access tokens](https://aka.ms/access-tokens) for. The first thing that we need to do is to declare the unique [resource](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow) URI that the clients will be using to obtain access tokens for this API. To declare an resource URI(Application ID URI), follow the following steps:
     1. Select **Set** next to the **Application ID URI** to generate a URI that is unique for this app.
-    1. For this sample, accept the proposed Application ID URI (`api://{clientId}`) by selecting **Save**.
+    2. For this sample, accept the proposed Application ID URI (`api://{clientId}`) by selecting **Save**.
         > :information_source: Read more about Application ID URI at [Validation differences by supported account types (signInAudience)](https://docs.microsoft.com/azure/active-directory/develop/supported-accounts-validation).
 
 ##### Publish Delegated Permissions
 
 1. All APIs must publish a minimum of one [scope](https://docs.microsoft.com/azure/active-directory/develop/v2-oauth2-auth-code-flow#request-an-authorization-code), also called [Delegated Permission](https://docs.microsoft.com/azure/active-directory/develop/v2-permissions-and-consent#permission-types), for the client apps to obtain an access token for a *user* successfully. To publish a scope, follow these steps:
-1. Select **Add a scope** button open the **Add a scope** screen and Enter the values as indicated below:
+2. Select **Add a scope** button open the **Add a scope** screen and Enter the values as indicated below:
     1. For **Scope name**, use `access_graph_on_behalf_of_user`.
-    1. Select **Admins and users** options for **Who can consent?**.
-    1. For **Admin consent display name** type in *Access Microsoft Graph as the signed-in user*.
-    1. For **Admin consent description** type in *Allow the app to access Microsoft Graph Api as the signed-in user*.
-    1. For **User consent display name** type in *Access Microsoft Graph on your behalf*.
-    1. For **User consent description** type in *Allow the Microsoft Graph APi on your behalf.*.
-    1. Keep **State** as **Enabled**.
-    1. Select the **Add scope** button on the bottom to save this scope.
-1. Select the **Manifest** blade on the left.
+    2. Select **Admins and users** options for **Who can consent?**.
+    3. For **Admin consent display name** type in *Access Microsoft Graph as the signed-in user*.
+    4. For **Admin consent description** type in *Allow the app to access Microsoft Graph Api as the signed-in user*.
+    5. For **User consent display name** type in *Access Microsoft Graph on your behalf*.
+    6. For **User consent description** type in *Allow the Microsoft Graph APi on your behalf.*.
+    7. Keep **State** as **Enabled**.
+    8. Select the **Add scope** button on the bottom to save this scope.
+3. Select the **Manifest** blade on the left.
     1. Set `accessTokenAcceptedVersion` property to **2**.
-    1. Select on **Save**.
+    2. Select on **Save**.
 
 > :information_source:  Follow [the principle of least privilege when publishing permissions](https://learn.microsoft.com/security/zero-trust/develop/protected-api-example) for a web API.
 
 ##### Configure Optional Claims
 
 1. Still on the same app registration, select the **Token configuration** blade to the left.
-1. Select **Add optional claim**:
+2. Select **Add optional claim**:
    1. Select **optional claim type**, then choose **Access**.
       1. Select the optional claim **idtyp**.
       > Indicates token type. This claim is the most accurate way for an API to determine if a token is an app token or an app+user token. This is not issued in tokens issued to users.
-   1. Select **Add** to save your changes.
-1. Still on the same app registration, select the **Manifest** blade to the left.
+   2. Select **Add** to save your changes.
+3. Still on the same app registration, select the **Manifest** blade to the left.
    1. Set the **optionalClaims** property as shown below to request client capabilities claim *xms_cc*:
 
    ```json
@@ -217,32 +216,32 @@ Open the project in your IDE (like Visual Studio or Visual Studio Code) to confi
 #### Register the client app (msal-react-spa)
 
 1. Navigate to the [Azure portal](https://portal.azure.com) and select the **Azure Active Directory** service.
-1. Select the **App Registrations** blade on the left, then select **New registration**.
-1. In the **Register an application page** that appears, enter your application's registration information:
+2. Select the **App Registrations** blade on the left, then select **New registration**.
+3. In the **Register an application page** that appears, enter your application's registration information:
     1. In the **Name** section, enter a meaningful application name that will be displayed to users of the app, for example `msal-react-spa`.
-    1. Under **Supported account types**, select **Accounts in this organizational directory only**
-    1. Select **Register** to create the application.
-1. In the **Overview** blade, find and note the **Application (client) ID**. You use this value in your app's configuration file(s) later in your code.
-1. In the app's registration screen, select the **Authentication** blade to the left.
-1. If you don't have a platform added, select **Add a platform** and select the **Single-page application** option.
+    2. Under **Supported account types**, select **Accounts in this organizational directory only**
+    3. Select **Register** to create the application.
+4. In the **Overview** blade, find and note the **Application (client) ID**. You use this value in your app's configuration file(s) later in your code.
+5. In the app's registration screen, select the **Authentication** blade to the left.
+6. If you don't have a platform added, select **Add a platform** and select the **Single-page application** option.
     1. In the **Redirect URI** section enter the following redirect URIs:
         1. `http://localhost:3000/`
-        1. `http://localhost:3000/redirect.html`
+        2. `http://localhost:3000/redirect.html`
     1. Click **Save** to save your changes.
-1. Since this app signs-in users, we will now proceed to select **delegated permissions**, which is is required by apps signing-in users.
+7. Since this app signs-in users, we will now proceed to select **delegated permissions**, which is is required by apps signing-in users.
     1. In the app's registration screen, select the **API permissions** blade in the left to open the page where we add access to the APIs that your application needs:
-    1. Select the **Add a permission** button and then:
-    1. Ensure that the **My APIs** tab is selected.
-    1. In the list of APIs, select the API `msal-node-api`.
-    1. In the **Delegated permissions** section, select **access_graph_on_behalf_of_user** in the list. Use the search box if necessary.
-    1. Select the **Add permissions** button at the bottom.
+    2. Select the **Add a permission** button and then:
+    3. Ensure that the **My APIs** tab is selected.
+    4. In the list of APIs, select the API `msal-node-api`.
+    5. In the **Delegated permissions** section, select **access_graph_on_behalf_of_user** in the list. Use the search box if necessary.
+    6. Select the **Add permissions** button at the bottom.
 
 ##### Configure Optional Claims
 
 1. Still on the same app registration, select the **Token configuration** blade to the left.
-1. Select **Add optional claim**:
+2. Select **Add optional claim**:
     1. Select **optional claim type**, then choose **Access**.
-    1. Select the optional claim **acct**.
+    2. Select the optional claim **acct**.
     > Provides user's account status in tenant. If the user is a **member** of the tenant, the value is *0*. If they're a **guest**, the value is *1*.
     1. Select **Add** to save your changes.
 
@@ -253,16 +252,16 @@ Open the project in your IDE (like Visual Studio or Visual Studio Code) to confi
 > In the steps below, "ClientID" is the same as "Application ID" or "AppId".
 
 1. Open the `SPA\src\authConfig.js` file.
-1. Find the key `Enter_the_Application_Id_Here` and replace the existing value with the application ID (clientId) of `msal-react-spa` app copied from the Azure portal.
-1. Find the key `Enter_the_Tenant_Id_Here` and replace the existing value with your Azure AD tenant/directory ID.
-1. Find the key `Enter_the_Web_Api_Application_Id_Here` and replace the existing value with the application ID (clientId) of `msal-node-api` app copied from the Azure portal.
+2. Find the key `Enter_the_Application_Id_Here` and replace the existing value with the application ID (clientId) of `msal-react-spa` app copied from the Azure portal.
+3. Find the key `Enter_the_Tenant_Id_Here` and replace the existing value with your Azure AD tenant/directory ID.
+4. Find the key `Enter_the_Web_Api_Application_Id_Here` and replace the existing value with the application ID (clientId) of `msal-node-api` app copied from the Azure portal.
 
 #### Configure Known Client Applications for service (msal-node-api)
 
 For a middle-tier web API (`msal-node-api`) to be able to call a downstream web API, the middle tier app needs to be granted the required permissions as well. However, since the middle-tier cannot interact with the signed-in user, it needs to be explicitly bound to the client app in its **Azure AD** registration. This binding merges the permissions required by both the client and the middle-tier web API and presents it to the end user in a single consent dialog. The user then consent to this combined set of permissions. To achieve this, you need to add the **Application Id** of the client app to the `knownClientApplications` property in the **manifest** of the web API. Here's how:
 
 1. In the [Azure portal](https://portal.azure.com), navigate to your `msal-node-api` app registration, and select the **Manifest** blade.
-1. In the manifest editor, change the `knownClientApplications: []` line so that the array contains the Client ID of the client application (`msal-react-spa`) as an element of the array.
+2. In the manifest editor, change the `knownClientApplications: []` line so that the array contains the Client ID of the client application (`msal-react-spa`) as an element of the array.
 
 For instance:
 
@@ -287,14 +286,10 @@ For instance:
 ## Explore the sample
 
 1. Open your browser and navigate to `http://localhost:3000`.
-1. Click the **sign-in** button on the top right corner.
-1. Once you authenticate, Select the **Call API** button on the navigation bar.
+2. Click the **sign-in** button on the top right corner.
+3. Once you authenticate, Select the **Call API** button on the navigation bar.
 
 > :information_source: Did the sample not work for you as expected? Then please reach out to us using the [GitHub Issues](../../../../issues) page.
-
-## We'd love your feedback!
-
-Were we successful in addressing your learning objective? Consider taking a moment to [share your experience with us](https://forms.office.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR73pcsbpbxNJuZCMKN0lURpUMlRHSkc5U1NLUkxFNEtVN0dEOTFNQkdTWiQlQCN0PWcu).
 
 ## Troubleshooting
 
@@ -495,12 +490,6 @@ export const handleClaimsChallenge = async (response, apiEndpoint, account) => {
     }
 };
 ```
-
-## Contributing
-
-If you'd like to contribute to this sample, see [CONTRIBUTING.MD](/CONTRIBUTING.md).
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information, see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
 
 ## Learn More
 
