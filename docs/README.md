@@ -51,7 +51,7 @@ This sample demonstrates a React single-page application (SPA) which lets a user
 From your shell or command line:
 
 ```console
-git clone https://github.com/Azure-Samples/ms-identity-javascript-react-tutorial.git
+git clone https://github.com/stever/ms-identity-react-example.git
 ```
 
 or download and extract the repository *.zip* file.
@@ -61,12 +61,7 @@ or download and extract the repository *.zip* file.
 ### Step 2: Install project dependencies
 
 ```console
-    cd 6-AdvancedScenarios\1-call-api-obo\API
-    npm install
-```
-
-```console
-    cd 6-AdvancedScenarios\1-call-api-obo\SPA
+    cd ms-identity-react-example
     npm install
 ```
 
@@ -225,13 +220,7 @@ For instance:
 ### Step 4: Running the sample
 
 ```console
-    cd 6-AdvancedScenarios\1-call-api-obo\API
-    npm start
-```
-
-```console
-    cd 6-AdvancedScenarios\1-call-api-obo\SPA
-    npm start
+    npm run dev
 ```
 
 ## Explore the sample
